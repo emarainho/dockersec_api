@@ -215,7 +215,6 @@ paths:
                   accepted:
                     type: boolean
 
-
   /tools/list:
     get:
       summary: Collect available security tools
@@ -225,8 +224,9 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/Tool'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tool'
 
   /tools/{toolId}/details:
     get:
