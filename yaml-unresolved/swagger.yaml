@@ -94,7 +94,20 @@ paths:
             format: int64
       responses:
         '200':
-          description: OK
+          description: Returns ID of analysis to abort and abort_status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  analysis_id:
+                    type: integer
+                    format: int64
+                  abort_status:
+                    type: string
+                    enum:
+                    - pass
+                    - fail
 
   /analysis/{analysisId}/progress:
     get:
@@ -333,3 +346,14 @@ components:
           type: string
         task_definition:
           type: string
+
+  # 1) Define the security scheme type (HTTP bearer)
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+
+# 2) Apply the security globally to all operations
+security:
+  - bearerAuth: []         # use the same name as above
