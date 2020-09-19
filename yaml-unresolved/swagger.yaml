@@ -24,6 +24,9 @@ paths:
                 properties:
                   api_status:
                     type: string
+                    enum:
+                    - "up"
+                    - "down"
 
   /version:
     get:
@@ -37,7 +40,9 @@ paths:
                 type: object
                 properties:
                   api_version:
-                    type: integer
+                    type: string
+                    enum:
+                    - "1.0.0"
 
   /analysis/create:
     post:
@@ -246,6 +251,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Tool'
+                example: ["str1", "str2", "str3"]
 
   /tools/{toolId}/details:
     get:
