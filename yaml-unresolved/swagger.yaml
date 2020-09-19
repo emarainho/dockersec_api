@@ -54,7 +54,7 @@ paths:
         content:
           application/octet-stream:
             schema:
-              # docker-sec.yaml definition 3to upload.
+              # docker-sec.yaml definition to upload.
               type: string
               format: binary
       responses:
