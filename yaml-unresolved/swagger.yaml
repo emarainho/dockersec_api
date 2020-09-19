@@ -12,6 +12,8 @@ servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/ema.rainho/dockersec_api/1.0.0
+  - url: https://localhost:8080/v1
+    description: Sandbox server (uses test data)
 
 paths:
   /health:
