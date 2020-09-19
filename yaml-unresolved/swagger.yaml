@@ -80,6 +80,8 @@ paths:
                     type: string
                   accepted:
                     type: boolean
+      security:
+      - ApiKeyAuth: []
 
   /analysis/{analysisId}/abort:
     delete:
@@ -108,6 +110,8 @@ paths:
                     enum:
                     - pass
                     - fail
+      security:
+      - ApiKeyAuth: []
 
   /analysis/{analysisId}/progress:
     get:
@@ -203,6 +207,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Task'
+      security:
+      - ApiKeyAuth: []
 
   /analysis/{analysisId}/results:
     get:
@@ -238,6 +244,8 @@ paths:
                     type: integer
                   report_results:
                     type: object
+      security:
+      - ApiKeyAuth: []
 
   /tools/create:
     post:
@@ -285,7 +293,21 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Tool'
-                example: ["str1", "str2", "str3"]
+                example:
+                    - tool_id: 38
+                      tool_name: truffleHog
+                      tool_type: secret-detection
+                      tool_definition: dockerfile
+                    - tool_id: 52
+                      tool_name: sonar-scanner
+                      tool_type: sast
+                      tool_definition: bash
+                    - tool_id: 114
+                      tool_name: owaspZAP
+                      tool_type: dast
+                      tool_definition: dockerfile
+      security:
+      - ApiKeyAuth: []
 
   /tools/{toolId}/details:
     get:
@@ -318,6 +340,8 @@ paths:
                     format: int64
                   dockerfile_dump:
                     type: object
+      security:
+      - ApiKeyAuth: []
 
 components:
   responses:
@@ -340,6 +364,9 @@ components:
           type: string
         tool_definition:
           type: string
+          enum:
+          - dockerfile
+          - bash
     Task:
       type: object
       properties:
@@ -358,7 +385,3 @@ components:
       type: apiKey
       in: header       # can be "header", "query" or "cookie"
       name: X-API-KEY  # name of the header, query parameter or cookie
-
-# 2) Apply the security globally to all operations
-security:
-  - ApiKeyAuth: []         # use the same name as above
