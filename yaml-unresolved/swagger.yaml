@@ -75,13 +75,14 @@ paths:
                 properties:
                   analysis_id:
                     type: integer
+                    format: int64
                   analysis_name:
                     type: string
                   accepted:
                     type: boolean
 
   /analysis/{analysisId}/abort:
-    get:
+    delete:
       summary: Abort a Analysis by ID
       parameters:
         - name: analysisId
@@ -90,6 +91,7 @@ paths:
           description: The ID of the Analysis to abort
           schema:
             type: integer
+            format: int64
       responses:
         '200':
           description: OK
@@ -104,6 +106,7 @@ paths:
           description: The Progress of Analysis Steps/Stages 1,2,3 and tool tasks (return status and tasks/stages IDs)
           schema:
             type: integer
+            format: int64
       responses:
         '400':
           description: The specified analysisId is invalid (e.g. not a number)
@@ -122,6 +125,12 @@ paths:
                     type: integer
                   analysis_name:
                     type: string
+                  progress:
+                    type: string
+                    enum: 
+                    - accepted
+                    - ongoing
+                    - completed
                   # number of steps/stages are configurable in docker-sec.yaml
                   step1_id:
                     type: integer
@@ -151,12 +160,14 @@ paths:
           description: The ID of the Step to retrieve Tasks
           schema:
             type: integer
+            format: int64
         - name: stepId
           in: path
           required: true
           description: The ID of the Task to return
           schema:
             type: integer
+            format: int32
       responses:
         '400':
           description: The specified analysisId or stepId is invalid (e.g. not a number)
@@ -190,6 +201,7 @@ paths:
           description: The ID of the Analysis
           schema:
             type: integer
+            format: int64
       responses:
         '400':
           description: The specified analysisId is invalid (e.g. not a number)
@@ -206,6 +218,7 @@ paths:
                 properties:
                   analysis_id:
                     type: integer
+                    format: int64
                   analysis_status:
                     type: string
                   report_id:
@@ -237,9 +250,10 @@ paths:
               schema:
                 type: object
                 properties:
-                  analysis_id:
+                  tool_id:
                     type: integer
-                  analysis_name:
+                    format: int64
+                  tool_name:
                     type: string
                   accepted:
                     type: boolean
@@ -268,6 +282,7 @@ paths:
           description: The ID of the tool
           schema:
             type: integer
+            format: int64
       responses:
          '200':
           description: The Dockerfile of the Security Tool with identified by toolId
@@ -278,12 +293,14 @@ paths:
                 properties:
                   tool_id:
                     type: integer
+                    format: int64
                   tool_name:
                     type: string
                   tool_status:
                     type: string
                   dockerfile_id:
                     type: integer
+                    format: int64
                   dockerfile_dump:
                     type: object
 
@@ -297,6 +314,7 @@ components:
       properties:
         tool_id:
           type: integer
+          format: int64
         tool_name:
           type: string
         tool_type:
@@ -308,6 +326,7 @@ components:
       properties:
         task_id:
           type: integer
+          format: int64
         task_name:
           type: string
         task_type:
