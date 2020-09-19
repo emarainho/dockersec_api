@@ -270,6 +270,8 @@ paths:
                     type: string
                   accepted:
                     type: boolean
+      security:
+      - ApiKeyAuth: []
 
   /tools/list:
     get:
@@ -346,13 +348,18 @@ components:
           type: string
         task_definition:
           type: string
-
-  # 1) Define the security scheme type (HTTP bearer)
   securitySchemes:
+    # Define the security scheme type (HTTP bearer)
     bearerAuth:            # arbitrary name for the security scheme
       type: http
       scheme: bearer
-      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+      bearerFormat: JWT      # optional, arbitrary value for documentation purposes
+    
+  # Define the key name and location
+    ApiKeyAuth:        # arbitrary name for the security scheme
+      type: apiKey
+      in: header       # can be "header", "query" or "cookie"
+      name: X-API-KEY  # name of the header, query parameter or cookie
 
 # 2) Apply the security globally to all operations
 security:
