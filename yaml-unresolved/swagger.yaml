@@ -353,13 +353,7 @@ components:
         task_definition:
           type: string
   securitySchemes:
-    # Define the security scheme type (HTTP bearer)
-    bearerAuth:            # arbitrary name for the security scheme
-      type: http
-      scheme: bearer
-      bearerFormat: JWT      # optional, arbitrary value for documentation purposes
-    
-  # Define the key name and location
+    # Define the key name and location
     ApiKeyAuth:        # arbitrary name for the security scheme
       type: apiKey
       in: header       # can be "header", "query" or "cookie"
@@ -367,4 +361,4 @@ components:
 
 # 2) Apply the security globally to all operations
 security:
-  - bearerAuth: []         # use the same name as above
+  - ApiKeyAuth: []         # use the same name as above
