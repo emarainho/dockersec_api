@@ -165,7 +165,7 @@ paths:
                   laststep_id:
                     type: integer
                   laststep_name:
-                    type: integer
+                    type: string
 
   /analysis/{analysisId}/step/{stepId}/tasks:
     get:
@@ -174,7 +174,7 @@ paths:
         - name: analysisId
           in: path
           required: true
-          description: The ID of the Step to retrieve Tasks
+          description: The ID of the Analysis to retrieve Steps
           schema:
             type: integer
             format: int64
