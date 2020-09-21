@@ -285,6 +285,10 @@ paths:
     get:
       summary: Collect available Security Tools
       responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Security Tools not found
         '200':
           description: Returns a list of Security Tools
           content:
@@ -321,7 +325,13 @@ paths:
             type: integer
             format: int64
       responses:
-         '200':
+        '400':
+          description: The specified toolId is invalid (e.g. not a number)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: The Tool with the specified ID was not found
+        '200':
           description: The Dockerfile of the Security Tool with identified by toolId
           content:
             application/json:
