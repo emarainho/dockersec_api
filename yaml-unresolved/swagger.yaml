@@ -169,7 +169,7 @@ paths:
 
   /analysis/{analysisId}/step/{stepId}/tasks:
     get:
-      summary: Returns tasks for a stepId
+      summary: Returns Tasks for a stepId
       parameters:
         - name: analysisId
           in: path
@@ -193,7 +193,7 @@ paths:
         '404':
           description: The Analysis or Step with the specified IDs was not found
         '200':
-          description: Returns Tasks from a Step in analysisId
+          description: Returns Tasks from a Step in analysisId.
           content:
             application/json:
               schema:
@@ -217,7 +217,7 @@ paths:
         - name: analysisId
           in: path
           required: true
-          description: The ID of the Analysis
+          description: The ID of the Analysis to retrieve results
           schema:
             type: integer
             format: int64
