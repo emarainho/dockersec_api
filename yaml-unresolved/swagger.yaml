@@ -288,7 +288,7 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
-          description: Security Tools not found
+          description: No Security Tools found!
         '200':
           description: Returns a list of Security Tools
           content:
