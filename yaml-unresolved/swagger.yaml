@@ -181,7 +181,7 @@ paths:
         - name: stepId
           in: path
           required: true
-          description: The ID of the Task to return
+          description: The ID of the Step to return Tasks
           schema:
             type: integer
             format: int32
@@ -191,9 +191,9 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
-          description: The analysis or step with the specified IDs was not found
+          description: The Analysis or Step with the specified IDs was not found
         '200':
-          description: Returns tasks from a Step in analysisId
+          description: Returns Tasks from a Step in analysisId
           content:
             application/json:
               schema:
