@@ -115,12 +115,12 @@ paths:
 
   /analysis/{analysisId}/progress:
     get:
-      summary: Progress of an Analysis by ID
+      summary: The Progress of Analysis Steps 1,2,3 and tool tasks
       parameters:
         - name: analysisId
           in: path
           required: true
-          description: The Progress of Analysis Steps/Stages 1,2,3 and tool tasks (return status and tasks/stages IDs)
+          description: The ID of the Analysis to retrieve progress
           schema:
             type: integer
             format: int64
