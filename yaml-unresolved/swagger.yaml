@@ -115,7 +115,7 @@ paths:
 
   /analysis/{analysisId}/progress:
     get:
-      summary: The Progress of Analysis Steps 1,2,3 and tool tasks
+      summary: The Progress of Analysis Stages 1,2,3 and tool tasks
       parameters:
         - name: analysisId
           in: path
@@ -148,60 +148,60 @@ paths:
                     - accepted
                     - ongoing
                     - completed
-                  # number of steps/stages are configurable in docker-sec.yaml
-                  step1_id:
+                  # number of stages are configurable in docker-sec.yaml
+                  stage1_id:
                     type: integer
-                  step1_status:
+                  stage1_status:
                     type: string
-                  step2_id:
+                  stage2_id:
                     type: integer
-                  step2_status:
+                  stage2_status:
                     type: string
-                  step3_id:
+                  stage3_id:
                     type: integer
-                  step3_status:
+                  stage3_status:
                     type: string
-                  # last step in analysis
-                  laststep_id:
+                  # last stage in analysis
+                  laststage_id:
                     type: integer
-                  laststep_name:
+                  laststage_name:
                     type: string
 
-  /analysis/{analysisId}/step/{stepId}/tasks:
+  /analysis/{analysisId}/stage/{stageId}/tasks:
     get:
-      summary: Returns Tasks for a stepId
+      summary: Returns Tasks for a stageId
       parameters:
         - name: analysisId
           in: path
           required: true
-          description: The ID of the Analysis to retrieve Steps
+          description: The ID of the Analysis to retrieve Stages
           schema:
             type: integer
             format: int64
-        - name: stepId
+        - name: stageId
           in: path
           required: true
-          description: The ID of the Step to return Tasks
+          description: The ID of the Stage to return Tasks
           schema:
             type: integer
             format: int32
       responses:
         '400':
-          description: The specified analysisId or stepId is invalid (e.g. not a number)
+          description: The specified analysisId or stageId is invalid (e.g. not a number)
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
-          description: The Analysis or Step with the specified IDs was not found
+          description: The Analysis or Stage with the specified IDs was not found
         '200':
-          description: Returns Tasks from a Step in analysisId.
+          description: Returns Tasks from a Stage in analysisId.
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  step_id:
+                  stage_id:
                     type: integer
-                  step_name:
+                  stage_name:
                     type: string
                   task_list:
                     type: array
