@@ -74,8 +74,7 @@ paths:
                 type: object
                 properties:
                   analysis_id:
-                    type: integer
-                    format: int64
+                    type: string
                   analysis_name:
                     type: string
                   accepted:
@@ -103,8 +102,7 @@ paths:
                 type: object
                 properties:
                   analysis_id:
-                    type: integer
-                    format: int64
+                    type: string
                   abort_status:
                     type: string
                     enum:
@@ -139,7 +137,7 @@ paths:
                 type: object
                 properties:
                   analysis_id:
-                    type: integer
+                    type: string
                   analysis_name:
                     type: string
                   progress:
@@ -236,8 +234,7 @@ paths:
                 type: object
                 properties:
                   analysis_id:
-                    type: integer
-                    format: int64
+                    type: string
                   analysis_status:
                     type: string
                   report_id:
@@ -272,8 +269,7 @@ paths:
                 type: object
                 properties:
                   tool_id:
-                    type: integer
-                    format: int64
+                    type: string
                   tool_name:
                     type: string
                   accepted:
@@ -298,16 +294,16 @@ paths:
                 items:
                   $ref: '#/components/schemas/Tool'
                 example:
-                    - tool_id: 38
+                    - tool_id: truffleHog:v2
                       tool_name: truffleHog
                       tool_type: secret-detection
                       tool_definition: dockerfile
-                    - tool_id: 52
-                      tool_name: sonar-scanner
+                    - tool_id: sonar-scanner:4.4
+                      tool_name: sonar-scanner-cli
                       tool_type: sast
                       tool_definition: bash
-                    - tool_id: 114
-                      tool_name: owaspZAP
+                    - tool_id: zap2docker-live:latest
+                      tool_name: zap2docker-live
                       tool_type: dast
                       tool_definition: dockerfile
       security:
@@ -339,15 +335,13 @@ paths:
                 type: object
                 properties:
                   tool_id:
-                    type: integer
-                    format: int64
+                    type: string
                   tool_name:
                     type: string
                   tool_status:
                     type: string
                   dockerfile_id:
-                    type: integer
-                    format: int64
+                    type: string
                   dockerfile_dump:
                     type: object
       security:
@@ -366,8 +360,7 @@ components:
       type: object
       properties:
         tool_id:
-          type: integer
-          format: int64
+          type: string
         tool_name:
           type: string
         tool_type:
