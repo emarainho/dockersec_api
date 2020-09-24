@@ -113,7 +113,7 @@ paths:
 
   /analysis/{analysisId}/progress:
     get:
-      summary: The Progress of Analysis Stages 1,2,3 and tool tasks
+      summary: The Progress of Analysis Stages 1,2,3 and Tool jobs
       parameters:
         - name: analysisId
           in: path
@@ -165,9 +165,9 @@ paths:
                   laststage_name:
                     type: string
 
-  /analysis/{analysisId}/stage/{stageId}/tasks:
+  /analysis/{analysisId}/stage/{stageId}/jobs:
     get:
-      summary: Returns Tasks for a stageId
+      summary: Returns Jobs for a stageId
       parameters:
         - name: analysisId
           in: path
@@ -179,7 +179,7 @@ paths:
         - name: stageId
           in: path
           required: true
-          description: The ID of the Stage to return Tasks
+          description: The ID of the Stage to return Jobs
           schema:
             type: integer
             format: int32
@@ -191,7 +191,7 @@ paths:
         '404':
           description: The Analysis or Stage with the specified IDs was not found
         '200':
-          description: Returns Tasks from a Stage in analysisId.
+          description: Returns Jobs from a Stage in analysisId.
           content:
             application/json:
               schema:
@@ -201,10 +201,10 @@ paths:
                     type: integer
                   stage_name:
                     type: string
-                  task_list:
+                  job_list:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Task'
+                      $ref: '#/components/schemas/Job'
       security:
       - ApiKeyAuth: []
 
@@ -370,17 +370,17 @@ components:
           enum:
           - dockerfile
           - bash
-    Task:
+    Job:
       type: object
       properties:
-        task_id:
+        job_id:
           type: integer
           format: int64
-        task_name:
+        job_name:
           type: string
-        task_type:
+        job_type:
           type: string
-        task_definition:
+        job_definition:
           type: string
   securitySchemes:
     # Define the key name and location
