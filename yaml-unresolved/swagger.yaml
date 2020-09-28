@@ -106,7 +106,7 @@ paths:
                   abort_status:
                     type: string
                     enum:
-                    - complete
+                    - success
                     - fail
       security:
       - ApiKeyAuth: []
@@ -244,7 +244,7 @@ paths:
       security:
       - ApiKeyAuth: []
 
-  /tools/create:
+  /tool/create:
     post:
       summary: Create a new Tool according to the uploaded definition
       requestBody:
@@ -277,7 +277,7 @@ paths:
       security:
       - ApiKeyAuth: []
 
-  /tools/{toolId}/delete:
+  /tool/{toolId}/remove:
     delete:
       summary: Remove the specified Security Tool
       parameters:
@@ -303,7 +303,7 @@ paths:
                 properties:
                   tool_id:
                     type: string
-                  delete_status:
+                  remove_status:
                     type: string
                     enum:
                     - complete
@@ -311,39 +311,7 @@ paths:
       security:
       - ApiKeyAuth: []
 
-  /tools/list:
-    get:
-      summary: Collect available Security Tools
-      responses:
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '404':
-          description: No Security Tools found!
-        '200':
-          description: Returns a list of Security Tools
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Tool'
-                example:
-                    - tool_id: truffleHog:v2
-                      tool_name: truffleHog
-                      tool_type: secret-detection
-                      tool_definition: dockerfile
-                    - tool_id: sonar-scanner:4.4
-                      tool_name: sonar-scanner-cli
-                      tool_type: sast
-                      tool_definition: bash
-                    - tool_id: zap2docker-live:latest
-                      tool_name: zap2docker-live
-                      tool_type: dast
-                      tool_definition: dockerfile
-      security:
-      - ApiKeyAuth: []
-
-  /tools/{toolId}/details:
+  /tool/{toolId}/details:
     get:
       summary: Returns details of specific Security Tool
       parameters:
@@ -380,6 +348,38 @@ paths:
       security:
       - ApiKeyAuth: []
 
+  /tools/list:
+    get:
+      summary: Collect available Security Tools
+      responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: No Security Tools found!
+        '200':
+          description: Returns a list of Security Tools
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tool'
+                example:
+                    - tool_id: truffleHog:v2
+                      tool_name: truffleHog
+                      tool_type: secret-detection
+                      tool_definition: dockerfile
+                    - tool_id: sonar-scanner:4.4
+                      tool_name: sonar-scanner-cli
+                      tool_type: sast
+                      tool_definition: bash
+                    - tool_id: zap2docker-live:latest
+                      tool_name: zap2docker-live
+                      tool_type: dast
+                      tool_definition: dockerfile
+      security:
+      - ApiKeyAuth: []
+
 components:
   responses:
     UnauthorizedError:
@@ -391,6 +391,7 @@ components:
   schemas:
     Tool:
       type: object
+      additionalProperties: false
       properties:
         tool_id:
           type: string
