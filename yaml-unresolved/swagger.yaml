@@ -406,6 +406,7 @@ components:
           - bash
     Job:
       type: object
+      additionalProperties: false
       properties:
         job_id:
           type: integer
