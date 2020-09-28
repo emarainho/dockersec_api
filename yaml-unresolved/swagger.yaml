@@ -372,7 +372,6 @@ paths:
             application/json:
               schema:
                 type: array
-                additionalProperties: false
                 items:
                   $ref: '#/components/schemas/Tool'
                 example:
