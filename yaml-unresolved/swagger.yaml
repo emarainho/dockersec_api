@@ -26,6 +26,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   api_status:
                     type: string
@@ -43,6 +44,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   api_version:
                     type: string
@@ -72,6 +74,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   analysis_id:
                     type: string
@@ -100,6 +103,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   analysis_id:
                     type: string
@@ -135,6 +139,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   analysis_id:
                     type: string
@@ -196,6 +201,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   stage_id:
                     type: integer
@@ -232,6 +238,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   analysis_id:
                     type: string
@@ -267,6 +274,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   tool_id:
                     type: string
@@ -300,6 +308,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   tool_id:
                     type: string
@@ -334,6 +343,7 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   tool_id:
                     type: string
@@ -362,6 +372,7 @@ paths:
             application/json:
               schema:
                 type: array
+                additionalProperties: false
                 items:
                   $ref: '#/components/schemas/Tool'
                 example:
