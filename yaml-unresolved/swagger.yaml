@@ -167,7 +167,7 @@ paths:
                   # last stage in analysis
                   laststage_id:
                     type: integer
-                  laststage_name:
+                  laststage_status:
                     type: string
 
   /analysis/{analysisId}/stage/{stageId}/jobs:
@@ -399,6 +399,41 @@ components:
           schema:
             type: string
   schemas:
+    Analysis:
+      type: object
+      additionalProperties: false
+      properties:
+        analysis_id:
+          type: string
+        analysis_name:
+          type: string
+        accepted:
+          type: boolean
+        abort_status:
+          type: string
+          enum:
+          - success
+          - fail
+        progress:
+          type: string
+          enum: 
+          - accepted
+          - ongoing
+          - completed
+        report_id:
+          type: integer
+        report_results:
+          type: object
+    Stage:
+      type: object
+      additionalProperties: false
+      properties:
+        stage_id:
+          type: string
+        stage_name:
+          type: string
+        stage_status:
+          type: string
     Tool:
       type: object
       additionalProperties: false
