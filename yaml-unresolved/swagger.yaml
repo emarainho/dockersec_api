@@ -171,6 +171,8 @@ paths:
                     type: integer
                   laststage_status:
                     type: string
+      security:
+      - ApiKeyAuth: []
 
   /analysis/{analysisId}/stage/{stageId}/jobs:
     get:
