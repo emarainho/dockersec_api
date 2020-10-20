@@ -19,6 +19,7 @@ paths:
   /health:
     get:
       summary: Returns the API health status
+      security: []   # No security
       responses:
          '200':
           description: API Health Status response (up/down)
@@ -37,6 +38,7 @@ paths:
   /version:
     get:
       summary: Returns the API version
+      security: []   # No security
       responses:
          '200':
           description: API version number response
