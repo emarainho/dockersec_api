@@ -347,6 +347,8 @@ components:
     Analysis:
       type: object
       additionalProperties: false
+      required:
+        - analysis_id
       properties:
         analysis_id:
           type: string
@@ -381,7 +383,7 @@ components:
         - type: object
           additionalProperties: false
           required:
-            - abort_status
+            - progress
           properties:
             progress:
               type: string
