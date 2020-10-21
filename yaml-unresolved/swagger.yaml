@@ -28,6 +28,8 @@ paths:
               schema:
                 type: object
                 additionalProperties: false
+                required:
+                  - api_status
                 properties:
                   api_status:
                     type: string
@@ -47,6 +49,8 @@ paths:
               schema:
                 type: object
                 additionalProperties: false
+                required:
+                  - api_version
                 properties:
                   api_version:
                     type: string
@@ -156,6 +160,10 @@ paths:
               schema:
                 type: object
                 additionalProperties: false
+                required:
+                  - analysis_id
+                  - stage_name
+                  - job_list
                 properties:
                   analysis_id:
                     type: string
