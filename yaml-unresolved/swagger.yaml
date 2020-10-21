@@ -286,19 +286,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  tool_id:
-                    type: string
-                  tool_name:
-                    type: string
-                  tool_status:
-                    type: string
-                  dockerfile_id:
-                    type: string
-                  dockerfile_dump:
-                    type: object
+                $ref: '#/components/schemas/ToolDetails'
       security:
       - ApiKeyAuth: []
 
@@ -398,17 +386,21 @@ components:
                 $ref: '#/components/schemas/Stage'
               uniqueItems: true
     AnalysisResults:
-      type: object
-      additionalProperties: false
-      properties:
-        analysis_id:
-          type: string
-        analysis_status:
-          type: string
-        report_id:
-          type: integer
-        report_results:
-          type: object
+      allOf:     # Combines the Analysis and the create model
+        - $ref: '#/components/schemas/Analysis'
+        - type: object
+          additionalProperties: false
+          required:
+            - analysis_status
+            - report_id
+            - report_results
+          properties:
+            analysis_status:
+              type: string
+            report_id:
+              type: integer
+            report_results:
+              type: object
     Stage:
       type: object
       additionalProperties: false
@@ -416,17 +408,6 @@ components:
         stage_name:
           type: string
         stage_status:
-          type: string
-    LastStage:  # last stage in analysis
-      type: object
-      additionalProperties: false
-      required:
-        - laststage_name
-        - laststage_status
-      properties:
-        laststage_name:
-          type: integer
-        laststage_status:
           type: string
     Tool:
       type: object
@@ -443,6 +424,20 @@ components:
           enum:
           - dockerfile
           - bash
+    ToolDetails:
+      allOf:     # Combines the Tools and the details model
+        - $ref: '#/components/schemas/Tool'
+        - type: object
+          additionalProperties: false
+          required:
+            - dockerfile_id
+            - dockerfile_dump
+          properties:
+            dockerfile_id:
+              type: string
+            dockerfile_dump:
+              type: string
+              format: binary
     Job:
       type: object
       additionalProperties: false
