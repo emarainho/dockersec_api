@@ -75,15 +75,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  analysis_id:
-                    type: string
-                  analysis_name:
-                    type: string
-                  accepted:
-                    type: boolean
+                $ref: '#/components/schemas/AnalysisCreate'
       security:
       - ApiKeyAuth: []
 
@@ -104,16 +96,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  analysis_id:
-                    type: string
-                  abort_status:
-                    type: string
-                    enum:
-                    - success
-                    - fail
+                $ref: '#/components/schemas/AnalysisAbort'
       security:
       - ApiKeyAuth: []
 
@@ -140,37 +123,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  analysis_id:
-                    type: string
-                  analysis_name:
-                    type: string
-                  progress:
-                    type: string
-                    enum: 
-                    - accepted
-                    - ongoing
-                    - completed
-                  # number of stages are configurable in docker-sec.yaml
-                  stage1_id:
-                    type: integer
-                  stage1_status:
-                    type: string
-                  stage2_id:
-                    type: integer
-                  stage2_status:
-                    type: string
-                  stage3_id:
-                    type: integer
-                  stage3_status:
-                    type: string
-                  # last stage in analysis
-                  laststage_id:
-                    type: integer
-                  laststage_status:
-                    type: string
+                $ref: '#/components/schemas/AnalysisProgress'
 
   /analysis/{analysisId}/stage/{stageId}/jobs:
     get:
@@ -239,17 +192,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  analysis_id:
-                    type: string
-                  analysis_status:
-                    type: string
-                  report_id:
-                    type: integer
-                  report_results:
-                    type: object
+                $ref: '#/components/schemas/AnalysisResults'
       security:
       - ApiKeyAuth: []
 
@@ -422,6 +365,71 @@ components:
           - accepted
           - ongoing
           - completed
+        report_id:
+          type: integer
+        report_results:
+          type: object
+    AnalysisCreate:
+      type: object
+      additionalProperties: false
+      properties:
+        analysis_id:
+          type: string
+        analysis_name:
+          type: string
+        accepted:
+          type: boolean
+    AnalysisAbort:
+      type: object
+      additionalProperties: false
+      properties:
+        analysis_id:
+          type: string
+        abort_status:
+          type: string
+          enum:
+          - success
+          - fail
+    AnalysisProgress:
+      type: object
+      additionalProperties: false
+      properties:
+        analysis_id:
+          type: string
+        analysis_name:
+          type: string
+        progress:
+          type: string
+          enum: 
+          - accepted
+          - ongoing
+          - completed
+        # number of stages are configurable in docker-sec.yaml
+        stage1_id:
+          type: integer
+        stage1_status:
+          type: string
+        stage2_id:
+          type: integer
+        stage2_status:
+          type: string
+        stage3_id:
+          type: integer
+        stage3_status:
+          type: string
+        # last stage in analysis
+        laststage_id:
+          type: integer
+        laststage_status:
+          type: string
+    AnalysisResults:
+      type: object
+      additionalProperties: false
+      properties:
+        analysis_id:
+          type: string
+        analysis_status:
+          type: string
         report_id:
           type: integer
         report_results:
