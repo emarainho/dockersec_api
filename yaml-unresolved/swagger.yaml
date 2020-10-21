@@ -125,9 +125,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/AnalysisProgress'
 
-  /analysis/{analysisId}/stage/{stageId}/jobs:
+  /analysis/{analysisId}/stage/{stageName}/jobs:
     get:
-      summary: Returns Jobs for a stageId
+      summary: Returns Jobs for a specific stage
       parameters:
         - name: analysisId
           in: path
@@ -136,7 +136,7 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: stageId
+        - name: stageName
           in: path
           required: true
           description: The ID of the Stage to return Jobs
@@ -145,7 +145,7 @@ paths:
             format: int32
       responses:
         '400':
-          description: The specified analysisId or stageId is invalid (e.g. not a number)
+          description: The specified analysisId or stageName is invalid (e.g. not a number or a name)
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -158,14 +158,13 @@ paths:
                 type: object
                 additionalProperties: false
                 properties:
-                  stage_id:
-                    type: integer
                   stage_name:
                     type: string
                   job_list:
                     type: array
                     items:
                       $ref: '#/components/schemas/Job'
+                    uniqueItems: true
       security:
       - ApiKeyAuth: []
 
@@ -319,6 +318,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Tool'
+                uniqueItems: true
                 example:
                     - tool_id: truffleHog:v2
                       tool_name: truffleHog
@@ -363,48 +363,38 @@ components:
             accepted:
               type: boolean
     AnalysisAbort:
-      type: object
-      additionalProperties: false
-      properties:
-        analysis_id:
-          type: string
-        abort_status:
-          type: string
-          enum:
-          - success
-          - fail
+      allOf:     # Combines the Analysis and the create model
+        - $ref: '#/components/schemas/Analysis'
+        - type: object
+          additionalProperties: false
+          required:
+            - abort_status
+          properties:
+            abort_status:
+              type: string
+              enum:
+              - success
+              - fail
     AnalysisProgress:
-      type: object
-      additionalProperties: false
-      properties:
-        analysis_id:
-          type: string
-        analysis_name:
-          type: string
-        progress:
-          type: string
-          enum: 
-          - accepted
-          - ongoing
-          - completed
-        # number of stages are configurable in docker-sec.yaml
-        stage1_id:
-          type: integer
-        stage1_status:
-          type: string
-        stage2_id:
-          type: integer
-        stage2_status:
-          type: string
-        stage3_id:
-          type: integer
-        stage3_status:
-          type: string
-        # last stage in analysis
-        laststage_id:
-          type: integer
-        laststage_status:
-          type: string
+      allOf:     # Combines the Analysis and the create model
+        - $ref: '#/components/schemas/Analysis'
+        - type: object
+          additionalProperties: false
+          required:
+            - abort_status
+          properties:
+            progress:
+              type: string
+              enum: 
+              - accepted
+              - ongoing
+              - completed
+            stages:
+            # number of stages are configurable in docker-sec.yaml
+              type: array
+              items:
+                $ref: '#/components/schemas/Stage'
+              uniqueItems: true
     AnalysisResults:
       type: object
       additionalProperties: false
@@ -421,11 +411,20 @@ components:
       type: object
       additionalProperties: false
       properties:
-        stage_id:
-          type: string
         stage_name:
           type: string
         stage_status:
+          type: string
+    LastStage:  # last stage in analysis
+      type: object
+      additionalProperties: false
+      required:
+        - laststage_name
+        - laststage_status
+      properties:
+        laststage_name:
+          type: integer
+        laststage_status:
           type: string
     Tool:
       type: object
