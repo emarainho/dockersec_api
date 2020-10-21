@@ -352,33 +352,16 @@ components:
           type: string
         analysis_name:
           type: string
-        accepted:
-          type: boolean
-        abort_status:
-          type: string
-          enum:
-          - success
-          - fail
-        progress:
-          type: string
-          enum: 
-          - accepted
-          - ongoing
-          - completed
-        report_id:
-          type: integer
-        report_results:
-          type: object
     AnalysisCreate:
-      type: object
-      additionalProperties: false
-      properties:
-        analysis_id:
-          type: string
-        analysis_name:
-          type: string
-        accepted:
-          type: boolean
+      allOf:     # Combines the Analysis and the create model
+        - $ref: '#/components/schemas/Analysis'
+        - type: object
+          additionalProperties: false
+          required:
+            - accepted
+          properties:
+            accepted:
+              type: boolean
     AnalysisAbort:
       type: object
       additionalProperties: false
