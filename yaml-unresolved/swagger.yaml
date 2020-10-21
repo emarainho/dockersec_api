@@ -141,8 +141,7 @@ paths:
           required: true
           description: The ID of the Stage to return Jobs
           schema:
-            type: integer
-            format: int32
+            type: string
       responses:
         '400':
           description: The specified analysisId or stageName is invalid (e.g. not a number or a name)
@@ -158,6 +157,8 @@ paths:
                 type: object
                 additionalProperties: false
                 properties:
+                  analysis_id:
+                    type: string
                   stage_name:
                     type: string
                   job_list:
