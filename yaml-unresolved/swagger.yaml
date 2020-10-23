@@ -55,7 +55,7 @@ paths:
                   api_version:
                     type: string
                     enum:
-                    - "1.0.0"
+                    - "v1"
 
   /analysis/create:
     post:
