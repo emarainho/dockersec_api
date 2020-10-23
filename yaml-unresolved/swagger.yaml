@@ -1,0 +1,478 @@
+openapi: 3.0.0
+
+info:
+  version: v1
+  title: 'DockerSec Tool - API'
+  description: 'API to enable Container Security in CI/CD Pipelines'
+  license:
+    name: GPLv3
+    url: https://www.gnu.org/licenses/gpl-3.0.en.html
+  
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ema.rainho/dockersec_api/v1
+  - description: Sandbox server (uses test data) 
+    url: https://localhost:8080/v1
+
+paths:
+  /health:
+    get:
+      summary: Returns the API health status
+      security: []   # No security
+      responses:
+         '200':
+          description: API Health Status response (up/down)
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - api_status
+                properties:
+                  api_status:
+                    type: string
+                    enum:
+                    - "up"
+                    - "down"
+
+  /version:
+    get:
+      summary: Returns the API version
+      security: []   # No security
+      responses:
+         '200':
+          description: API version number response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - api_version
+                properties:
+                  api_version:
+                    type: string
+                    enum:
+                    - "1.0.0"
+
+  /analysis/create:
+    post:
+      summary: Create a new Analysis according to the uploaded definition
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              # docker-sec.yaml definition to upload.
+              type: string
+              format: binary
+      responses:
+        '400':
+          description: The specified YAML definition is invalid (e.g. not a valid YAML)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: The YAML definition for a new analysis was not found
+        '200':
+          description: Returns new analysis name, analysisId and accepted code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisCreate'
+      security:
+      - ApiKeyAuth: []
+
+  /analysis/{analysisId}/abort:
+    delete:
+      summary: Abort a Analysis by ID
+      parameters:
+        - name: analysisId
+          in: path
+          required: true
+          description: The ID of the Analysis to abort
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Returns ID of analysis to abort and abort_status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisAbort'
+      security:
+      - ApiKeyAuth: []
+
+  /analysis/{analysisId}/progress:
+    get:
+      summary: The Progress of Analysis Stages 1,2,3 and Tool jobs
+      parameters:
+        - name: analysisId
+          in: path
+          required: true
+          description: The ID of the Analysis to retrieve progress
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: The specified analysisId is invalid (e.g. not a number)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: The analysis with the specified ID was not found
+        '200':
+          description: Analysis progress response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisProgress'
+
+  /analysis/{analysisId}/stage/{stageName}/jobs:
+    get:
+      summary: Returns Jobs for a specific stage
+      parameters:
+        - name: analysisId
+          in: path
+          required: true
+          description: The ID of the Analysis to retrieve Stages
+          schema:
+            type: integer
+            format: int64
+        - name: stageName
+          in: path
+          required: true
+          description: The ID of the Stage to return Jobs
+          schema:
+            type: string
+      responses:
+        '400':
+          description: The specified analysisId or stageName is invalid (e.g. not a number or a name)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: The Analysis or Stage with the specified IDs was not found
+        '200':
+          description: Returns Jobs from a Stage in analysisId.
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required:
+                  - analysis_id
+                  - stage_name
+                  - job_list
+                properties:
+                  analysis_id:
+                    type: string
+                  stage_name:
+                    type: string
+                  job_list:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Job'
+                    uniqueItems: true
+      security:
+      - ApiKeyAuth: []
+
+  /analysis/{analysisId}/results:
+    get:
+      summary: Returns results status of Analysis (can include report if complete)
+      parameters:
+        - name: analysisId
+          in: path
+          required: true
+          description: The ID of the Analysis to retrieve results
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: The specified analysisId is invalid (e.g. not a number)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: The Analysis with the specified ID was not found
+        '200':
+          description: Analysis Status response (can include Report results if finished)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisResults'
+      security:
+      - ApiKeyAuth: []
+
+  /tool/create:
+    post:
+      summary: Create a new Tool according to the uploaded definition
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              # Dockerfile to upload.
+              type: string
+              format: binary
+      responses:
+        '400':
+          description: The specified Dockerfile definition is invalid (e.g. not a valid Dockerfile)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: The Dockerfile definition for a new Tool was not found
+        '200':
+          description: Returns new Tool name, toolId and accepted code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolCreate'
+      security:
+      - ApiKeyAuth: []
+
+  /tool/{toolId}/remove:
+    delete:
+      summary: Remove the specified Security Tool
+      parameters:
+        - name: toolId
+          in: path
+          required: true
+          description: The ID of the tool (name:tag)
+          schema:
+            type: "string"
+      responses:
+        '400':
+          description: The specified toolId is invalid (e.g. not a number)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: The Tool with the specified ID was not found
+        '200':
+          description: Returns ID of toolId to remove and delete_status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolRemove'
+      security:
+      - ApiKeyAuth: []
+
+  /tool/{toolId}/details:
+    get:
+      summary: Returns details of specific Security Tool
+      parameters:
+        - name: toolId
+          in: path
+          required: true
+          description: The ID of the tool (name:tag)
+          schema:
+            type: string
+      responses:
+        '400':
+          description: The specified toolId is invalid (e.g. not a number)
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: The Tool with the specified ID was not found
+        '200':
+          description: The Dockerfile of the Security Tool with identified by toolId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolDetails'
+      security:
+      - ApiKeyAuth: []
+
+  /tools/list:
+    get:
+      summary: Collect available Security Tools
+      responses:
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: No Security Tools found!
+        '200':
+          description: Returns a list of Security Tools
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tool'
+                uniqueItems: true
+                example:
+                    - tool_id: truffleHog:v2
+                      tool_name: truffleHog
+                      tool_type: secret-detection
+                      tool_definition: dockerfile
+                    - tool_id: sonar-scanner:4.4
+                      tool_name: sonar-scanner-cli
+                      tool_type: sast
+                      tool_definition: bash
+                    - tool_id: zap2docker-live:latest
+                      tool_name: zap2docker-live
+                      tool_type: dast
+                      tool_definition: dockerfile
+      security:
+      - ApiKeyAuth: []
+
+components:
+  responses:
+    UnauthorizedError:
+      description: API key is missing or invalid
+      headers:
+        WWW_Authenticate:
+          schema:
+            type: string
+  schemas:
+    Analysis:
+      type: object
+      additionalProperties: false
+      required:
+        - analysis_id
+      properties:
+        analysis_id:
+          type: string
+        analysis_name:
+          type: string
+    AnalysisCreate:
+      allOf:     # Combines the Analysis and the create model
+        - $ref: '#/components/schemas/Analysis'
+        - type: object
+          additionalProperties: false
+          required:
+            - accepted
+          properties:
+            accepted:
+              type: boolean
+    AnalysisAbort:
+      allOf:     # Combines the Analysis and the abort model
+        - $ref: '#/components/schemas/Analysis'
+        - type: object
+          additionalProperties: false
+          required:
+            - abort_status
+          properties:
+            abort_status:
+              type: string
+              enum:
+              - success
+              - fail
+    AnalysisProgress:
+      allOf:     # Combines the Analysis and the progress model
+        - $ref: '#/components/schemas/Analysis'
+        - type: object
+          additionalProperties: false
+          required:
+            - progress
+          properties:
+            progress:
+              type: string
+              enum: 
+              - accepted
+              - ongoing
+              - completed
+            stages:
+            # number of stages are configurable in docker-sec.yaml
+              type: array
+              items:
+                $ref: '#/components/schemas/Stage'
+              uniqueItems: true
+    AnalysisResults:
+      allOf:     # Combines the Analysis and the results model
+        - $ref: '#/components/schemas/Analysis'
+        - type: object
+          additionalProperties: false
+          required:
+            - analysis_status
+            - report_id
+            - report_results
+          properties:
+            analysis_status:
+              type: string
+            report_id:
+              type: integer
+            report_results:
+              type: object
+    Stage:
+      type: object
+      additionalProperties: false
+      properties:
+        stage_name:
+          type: string
+        stage_status:
+          type: string
+    Tool:
+      type: object
+      additionalProperties: false
+      properties:
+        tool_id:
+          type: string
+        tool_name:
+          type: string
+    ToolCreate:
+      allOf:     # Combines the Tool and the create model
+        - $ref: '#/components/schemas/Tool'
+        - type: object
+          additionalProperties: false
+          required:
+            - accepted
+          properties:
+            accepted:
+              type: boolean
+    ToolRemove:
+      allOf:     # Combines the Tool and the remove model
+        - $ref: '#/components/schemas/Tool'
+        - type: object
+          additionalProperties: false
+          required:
+            - remove_status
+          properties:
+            remove_status:
+              type: string
+              enum:
+              - complete
+              - fail
+    ToolDetails:
+      allOf:     # Combines the Tool and the details model
+        - $ref: '#/components/schemas/Tool'
+        - type: object
+          additionalProperties: false
+          required:
+            - tool_type
+            - tool_definition
+            - dockerfile_id
+            - dockerfile_dump
+          properties:
+            tool_type:
+              type: string
+            tool_definition:
+              type: string
+              enum:
+              - dockerfile
+              - bash
+            dockerfile_id:
+              type: string
+            dockerfile_dump:
+              type: string
+              format: binary
+    Job:
+      type: object
+      additionalProperties: false
+      properties:
+        job_id:
+          type: integer
+          format: int64
+        job_name:
+          type: string
+        job_type:
+          type: string
+        job_definition:
+          type: string
+  securitySchemes:
+    # Define the key name and location
+    ApiKeyAuth:        # arbitrary name for the security scheme
+      type: apiKey
+      in: header       # can be "header", "query" or "cookie"
+      name: X-API-KEY  # name of the header, query parameter or cookie
+security:
+- ApiKeyAuth: []
