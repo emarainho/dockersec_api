@@ -63,10 +63,12 @@ paths:
       requestBody:
         content:
           application/octet-stream:
+            # docker-sec.yaml definition to upload.
             schema:
-              # docker-sec.yaml definition to upload.
-              type: string
-              format: binary
+              properties:
+                filename:
+                  type: string
+                  format: binary
       responses:
         '400':
           description: The specified YAML definition is invalid (e.g. not a valid YAML)
