@@ -82,6 +82,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AnalysisCreate'
+        '101':
+          description: Continue - The Analysis request has been received and is processing, but no response is available yet.
+        '102':
+          description: Processing - The Analysis is OK so far, client should continue the request or ignore the response if the request already finished
       security:
       - ApiKeyAuth: []
 
@@ -395,6 +399,7 @@ components:
               type: integer
             report_results:
               type: object
+              additionalProperties: false
     Stage:
       type: object
       additionalProperties: false
