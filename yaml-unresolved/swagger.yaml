@@ -10,11 +10,8 @@ info:
   
 servers:
   # Added by API Auto Mocking Plugin
-  # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/ema.rainho/SecureApps-CI/v1
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/ema.rainho/dockersec_api/v1
   - description: Sandbox server (uses test data) 
     url: https://localhost:8080/v1
 
