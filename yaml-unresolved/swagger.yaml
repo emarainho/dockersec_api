@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   version: v1
   title: 'SecureApps-CI'
-  description: 'API to enable Application Security integration on CI/CD Pipelines.'
+  description: 'API to enable application security into CI/CD Pipelines.'
   license:
     name: GPLv3
     url: https://www.gnu.org/licenses/gpl-3.0.en.html
